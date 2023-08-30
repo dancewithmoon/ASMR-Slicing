@@ -9,6 +9,7 @@ using Infrastructure.Factory;
 using Infrastructure.States;
 using Infrastructure.StaticData;
 using UnityEngine;
+using UserInput;
 
 namespace Infrastructure
 {
@@ -35,11 +36,13 @@ namespace Infrastructure
         private void RegisterServices()
         {
             SceneLoader sceneLoader = new SceneLoader(this);
-            
+
+            IInputService inputService = Application.isEditor ? new StandaloneInputService() : new MobileInputService();
+
             IAssets assets = new ResourcesAssets();
             IInstantiateService instantiateService = new InstantiateService();
 
-            IGameFactory gameFactory = new GameFactory(assets, instantiateService);
+            IGameFactory gameFactory = new GameFactory(assets, instantiateService, inputService);
             IStaticDataService staticDataService = new StaticDataService(assets);
 
             List<IExitableState> states = new List<IExitableState>
@@ -51,6 +54,7 @@ namespace Infrastructure
             IGameStateMachine stateMachine = new GameStateMachine(states);
             
             ServiceLocator.Container.RegisterSingle(sceneLoader);
+            ServiceLocator.Container.RegisterSingle(inputService);
             ServiceLocator.Container.RegisterSingle(assets);
             ServiceLocator.Container.RegisterSingle(instantiateService);
             ServiceLocator.Container.RegisterSingle(gameFactory);
