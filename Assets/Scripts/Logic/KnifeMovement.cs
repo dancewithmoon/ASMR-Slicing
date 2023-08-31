@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Logic
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class Knife : MonoBehaviour
+    public class KnifeMovement : MonoBehaviour
     {
         [SerializeField] private float _cutSpeed;
         [SerializeField] private float _releaseDuration;
@@ -21,7 +21,7 @@ namespace Logic
             _defaultPosition = transform.position;
         }
         
-        public void Cut()
+        public void Move()
         {
             if(Stopped)
                 return;

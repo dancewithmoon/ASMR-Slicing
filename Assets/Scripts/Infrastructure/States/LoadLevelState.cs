@@ -48,7 +48,7 @@ namespace Infrastructure.States
             _gameFactory.CreateKnife(levelData.KnifeData);
             _gameFactory.CreateSliceableItem(levelData.ItemData);
             
-            StateMachine.Enter<GameLoopState>();
+            StateMachine.Enter<WaitForActionState>();
         }
     }
 }

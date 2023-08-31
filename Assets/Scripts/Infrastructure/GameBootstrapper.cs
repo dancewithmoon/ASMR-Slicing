@@ -8,6 +8,7 @@ using Base.States;
 using Infrastructure.Factory;
 using Infrastructure.States;
 using Infrastructure.StaticData;
+using Services;
 using UnityEngine;
 using UserInput;
 
@@ -42,14 +43,17 @@ namespace Infrastructure
             IAssets assets = new ResourcesAssets();
             IInstantiateService instantiateService = new InstantiateService();
 
-            IGameFactory gameFactory = new GameFactory(assets, instantiateService, inputService);
+            IMeshCombineService meshCombineService = new MeshCombineService();
+
+            IGameFactory gameFactory = new GameFactory(assets, instantiateService, inputService, meshCombineService);
             IStaticDataService staticDataService = new StaticDataService(assets);
 
             List<IExitableState> states = new List<IExitableState>
             {
                 new BootstrapState(sceneLoader, staticDataService),
                 new LoadLevelState(sceneLoader, gameFactory, staticDataService),
-                new GameLoopState()
+                new WaitForActionState(this, inputService),
+                new GameLoopState(gameFactory)
             };
             IGameStateMachine stateMachine = new GameStateMachine(states);
             
@@ -57,6 +61,7 @@ namespace Infrastructure
             ServiceLocator.Container.RegisterSingle(inputService);
             ServiceLocator.Container.RegisterSingle(assets);
             ServiceLocator.Container.RegisterSingle(instantiateService);
+            ServiceLocator.Container.RegisterSingle(meshCombineService);
             ServiceLocator.Container.RegisterSingle(gameFactory);
             ServiceLocator.Container.RegisterSingle(staticDataService);
             ServiceLocator.Container.RegisterSingle(stateMachine);

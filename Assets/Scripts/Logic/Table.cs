@@ -6,7 +6,7 @@ namespace Logic
     {
         private void OnTriggerEnter(Collider other)
         {
-            Knife knife = other.GetComponentInParent<Knife>();
+            KnifeMovement knife = other.GetComponentInParent<KnifeMovement>();
             
             if(knife == null)
                 return;
