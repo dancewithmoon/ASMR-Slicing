@@ -43,10 +43,8 @@ namespace Infrastructure
             IAssets assets = new ResourcesAssets();
             IInstantiateService instantiateService = new InstantiateService();
 
-            IMeshCombineService meshCombineService = new MeshCombineService();
-
-            IGameFactory gameFactory = new GameFactory(assets, instantiateService, inputService, meshCombineService);
             IStaticDataService staticDataService = new StaticDataService(assets);
+            IGameFactory gameFactory = new GameFactory(assets, instantiateService, inputService, staticDataService);
 
             List<IExitableState> states = new List<IExitableState>
             {
@@ -61,7 +59,6 @@ namespace Infrastructure
             ServiceLocator.Container.RegisterSingle(inputService);
             ServiceLocator.Container.RegisterSingle(assets);
             ServiceLocator.Container.RegisterSingle(instantiateService);
-            ServiceLocator.Container.RegisterSingle(meshCombineService);
             ServiceLocator.Container.RegisterSingle(gameFactory);
             ServiceLocator.Container.RegisterSingle(staticDataService);
             ServiceLocator.Container.RegisterSingle(stateMachine);

@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e33c33f7c03140698aa73e850ca41340, type: 3}
-  m_Name: TestStaticData
+  m_Script: {fileID: 11500000, guid: 8f9b361aba454849b6c125fe4a537114, type: 3}
+  m_Name: KnifeStaticData
   m_EditorClassIdentifier: 
-  _playerStartPosition: {x: 0, y: 0, z: 0}
+  _knifeParameters:
+    _sliceDirection: {x: 1, y: 0, z: 0}
+    _moveDirection: {x: 0, y: -1, z: 0}
+    _moveSpeed: 3
+    _releaseDuration: 0.4

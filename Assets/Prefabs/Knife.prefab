@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1956113364477005948}
   - component: {fileID: 8047055829498693111}
   - component: {fileID: 1544843941527306316}
+  - component: {fileID: 1375188031755536559}
   - component: {fileID: 3890772213290019392}
   m_Layer: 0
   m_Name: Knife
@@ -50,6 +51,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cutSpeed: 3
   _releaseDuration: 0.4
+  _onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1375188031755536559}
+        m_TargetAssemblyTypeName: Logic.KnifeSlicing, Assembly-CSharp
+        m_MethodName: AllowSlice
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1544843941527306316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +78,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5c88c1832f440a865d160497b0a95d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1375188031755536559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183973985763429062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80ec3dc51f1d4774b27db5293b3f7b06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _origin: {x: 1, y: 0, z: 0}
+  _direction: {x: -1, y: 0, z: 0}
 --- !u!54 &3890772213290019392
 Rigidbody:
   m_ObjectHideFlags: 0
