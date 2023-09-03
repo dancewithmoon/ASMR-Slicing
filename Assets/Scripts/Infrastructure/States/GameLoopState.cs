@@ -12,6 +12,8 @@ namespace Infrastructure.States
         private KnifeSlicing _knifeSlicing;
         private KnifeMovement _knifeMovement;
         private Throwable _slice;
+
+        private bool _sliceFinished;
         
         public IGameStateMachine StateMachine { get; set; }
         
@@ -49,9 +51,13 @@ namespace Infrastructure.States
             
             _slice = sliceable.Negative.GetComponent<Throwable>();
         }
-
+        
         private void OnKnifeRelease()
         {
+            if (_sliceFinished == false) 
+                return;
+            
+            _sliceFinished = false;
             _movable.Move();
             _knifeSlicing.AllowSlice();
         }
@@ -61,6 +67,7 @@ namespace Infrastructure.States
             if (_slice == null) 
                 return;
             
+            _sliceFinished = true;
             _slice.Throw();
         }
     }
