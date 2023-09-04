@@ -10,6 +10,9 @@ using Infrastructure.Factory;
 using Infrastructure.States;
 using Infrastructure.StaticData;
 using Services;
+using UI.Factory;
+using UI.ScreenService;
+using UI.StaticData;
 using UnityEngine;
 using UserInput;
 
@@ -47,26 +50,23 @@ namespace Infrastructure
             IInstantiateService instantiateService = new InstantiateService();
 
             IStaticDataService staticDataService = new StaticDataService(assets);
+            IUiStaticDataService uiStaticDataService = new UiStaticDataService(assets);
+                
             IGameFactory gameFactory = new GameFactory(assets, instantiateService, inputService, staticDataService);
+            IUiFactory uiFactory = new UiFactory(assets, instantiateService, uiStaticDataService);
 
+            IScreenService screenService = new ScreenService(uiFactory);
+            
             List<IExitableState> states = new List<IExitableState>
             {
-                new BootstrapState(sceneLoader, staticDataService),
-                new LoadLevelState(sceneLoader, gameFactory, staticDataService),
-                new WaitForActionState(this, inputService),
+                new BootstrapState(sceneLoader, staticDataService, uiStaticDataService),
+                new LoadLevelState(sceneLoader, gameFactory, staticDataService, uiFactory),
+                new WaitForActionState(this, inputService, screenService),
                 new GameLoopState(gameFactory, deformableManager),
                 new LevelCompletedState(this, gameFactory, inputService)
             };
             IGameStateMachine stateMachine = new GameStateMachine(states);
-            
-            ServiceLocator.Container.RegisterSingle(sceneLoader);
-            ServiceLocator.Container.RegisterSingle(inputService);
-            ServiceLocator.Container.RegisterSingle(assets);
-            ServiceLocator.Container.RegisterSingle(instantiateService);
-            ServiceLocator.Container.RegisterSingle(gameFactory);
-            ServiceLocator.Container.RegisterSingle(staticDataService);
-            ServiceLocator.Container.RegisterSingle(stateMachine);
-            
+
             _game = new Game(stateMachine);
         }
 

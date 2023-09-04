@@ -6,8 +6,8 @@ namespace Infrastructure.StaticData
 {
     public class StaticDataService : IStaticDataService
     {
-        private const string LevelStaticDataPath = "LevelStaticData";
-        private const string KnifeStaticDataPath = "KnifeStaticData";
+        private const string LevelStaticDataPath = "StaticData/LevelStaticData";
+        private const string KnifeStaticDataPath = "StaticData/KnifeStaticData";
         
         private readonly IAssets _assets;
 
