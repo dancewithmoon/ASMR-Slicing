@@ -1,8 +1,8 @@
-using System;
 using Deform;
+using Logic.Slice;
 using UnityEngine;
 
-namespace Logic
+namespace Logic.Knife
 {
     public class KnifeDeforming : MonoBehaviour
     {

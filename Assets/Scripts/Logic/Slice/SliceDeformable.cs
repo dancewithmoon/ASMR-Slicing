@@ -3,7 +3,7 @@ using System.Linq;
 using Deform;
 using UnityEngine;
 
-namespace Logic
+namespace Logic.Slice
 {
     [RequireComponent(typeof(MeshFilter))]
     public class SliceDeformable : MonoBehaviour

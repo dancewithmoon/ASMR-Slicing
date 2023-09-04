@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1544843941527306316}
   - component: {fileID: 1375188031755536559}
   - component: {fileID: 7405227385934342780}
+  - component: {fileID: 4013082536525288535}
   m_Layer: 0
   m_Name: Knife
   m_TagString: Untagged
@@ -113,6 +114,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bendDeformer: {fileID: 3642397303771600305}
+--- !u!114 &4013082536525288535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183973985763429062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6acdce55d78a42289d001cbfa5d6ba84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movementDuration: 1
 --- !u!1 &2725652113558125359
 GameObject:
   m_ObjectHideFlags: 0

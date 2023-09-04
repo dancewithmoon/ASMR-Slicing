@@ -3,7 +3,8 @@ using Base.AssetManagement;
 using Base.Data;
 using Base.Instantiating;
 using Infrastructure.StaticData;
-using Logic;
+using Logic.Knife;
+using Logic.Slice;
 using UnityEngine;
 using UserInput;
 
@@ -35,9 +36,10 @@ namespace Infrastructure.Factory
 
             KnifeParameters knifeParameters = _staticDataService.GetKnifeStaticData().KnifeParameters;            
             
-            instance.GetComponent<KnifeController>().Initialize(_inputService);
+            instance.GetComponent<KnifeMovementController>().Initialize(_inputService);
             instance.GetComponent<KnifeMovement>().Initialize(knifeParameters);
             instance.GetComponent<KnifeSlicing>().Initialize(knifeParameters);
+            instance.GetComponent<KnifeRemoving>().Initialize(_staticDataService.GetLevelStaticData().KnifeRemovedPosition);
             
             Knife = instance;
         }
@@ -47,7 +49,7 @@ namespace Infrastructure.Factory
             GameObject instance = InstantiateRegistered(gameObjectData.Prefab, gameObjectData.TransformData.WorldPosition, 
                 Quaternion.Euler(gameObjectData.TransformData.RotationEuler), gameObjectData.TransformData.Scale);
 
-            instance.GetComponent<SliceMovement>().Initialize(_staticDataService.GetLevelStaticData().ItemFinalPosition);
+            instance.GetComponent<SliceMovement>().Initialize(_staticDataService.GetLevelStaticData().SliceFinalPosition);
             
             SliceableItem = instance;
         }

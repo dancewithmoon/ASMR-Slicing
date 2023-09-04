@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Logic
+namespace Logic.Slice
 {
     public interface ISliceable
     {

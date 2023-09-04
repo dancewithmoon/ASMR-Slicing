@@ -3,7 +3,7 @@ using DG.Tweening;
 using Infrastructure.StaticData;
 using UnityEngine;
 
-namespace Logic
+namespace Logic.Knife
 {
     [RequireComponent(typeof(Rigidbody))]
     public class KnifeMovement : MonoBehaviour

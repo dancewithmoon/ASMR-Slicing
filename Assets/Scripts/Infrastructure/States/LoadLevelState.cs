@@ -45,8 +45,8 @@ namespace Infrastructure.States
             await _preload;
             
             LevelStaticData levelData = _staticDataService.GetLevelStaticData();
-            _gameFactory.CreateKnife(levelData.KnifeData);
-            _gameFactory.CreateSliceableItem(levelData.ItemData);
+            _gameFactory.CreateKnife(levelData.KnifeSceneData);
+            _gameFactory.CreateSliceableItem(levelData.SliceSceneData);
             
             StateMachine.Enter<WaitForActionState>();
         }

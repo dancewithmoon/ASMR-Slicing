@@ -6,12 +6,18 @@ namespace Infrastructure.StaticData
     [CreateAssetMenu(menuName = "StaticData/Level")]
     public class LevelStaticData : ScriptableObject
     {
-        [SerializeField] private GameObjectSceneData _knifeData;
-        [SerializeField] private GameObjectSceneData _itemData;
-        [SerializeField] private Vector3 _itemFinalPosition;
+        [Header("Knife")]
+        [SerializeField] private GameObjectSceneData _knifeSceneData;
+        [SerializeField] private Vector3 _knifeRemovedPosition;
+        
+        [Header("Slice")]
+        [SerializeField] private GameObjectSceneData _sliceSceneData;
+        [SerializeField] private Vector3 _sliceFinalPosition;
 
-        public GameObjectSceneData KnifeData => _knifeData;
-        public GameObjectSceneData ItemData => _itemData;
-        public Vector3 ItemFinalPosition => _itemFinalPosition;
+        public GameObjectSceneData KnifeSceneData => _knifeSceneData;
+        public Vector3 KnifeRemovedPosition => _knifeRemovedPosition;
+        
+        public GameObjectSceneData SliceSceneData => _sliceSceneData;
+        public Vector3 SliceFinalPosition => _sliceFinalPosition;
     }
 }

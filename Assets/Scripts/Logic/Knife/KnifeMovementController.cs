@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UserInput;
 
-namespace Logic
+namespace Logic.Knife
 {
     [RequireComponent(typeof(KnifeMovement))]
-    public class KnifeController : MonoBehaviour
+    public class KnifeMovementController : MonoBehaviour
     {
         private IInputService _inputService;
         private KnifeMovement _movement;

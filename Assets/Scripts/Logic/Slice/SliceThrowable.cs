@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Logic
+namespace Logic.Slice
 {
     [RequireComponent(typeof(Rigidbody))]
     public class SliceThrowable : MonoBehaviour

@@ -1,15 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Base.Services;
 using Base.States;
+using Constants;
 using Infrastructure.StaticData;
 
 namespace Infrastructure.States
 {
     public class BootstrapState : IState
     {
-        private const string InitialScene = "Initial";
-        private const string TestScene = "TestScene";
-        
         private readonly SceneLoader _sceneLoader;
         private readonly IStaticDataService _staticDataService;
 
@@ -24,7 +22,7 @@ namespace Infrastructure.States
         public async void Enter()
         {
             await Task.WhenAll(_staticDataService.Preload());
-            _sceneLoader.Load(InitialScene, EnterLoadLevel);
+            _sceneLoader.Load(Scenes.InitialScene, EnterLoadLevel);
         }
 
         public void Exit()
@@ -33,7 +31,7 @@ namespace Infrastructure.States
 
         private void EnterLoadLevel()
         {
-            StateMachine.Enter<LoadLevelState, string>(TestScene);
+            StateMachine.Enter<LoadLevelState, string>(Scenes.TestScene);
         }
     }
 }

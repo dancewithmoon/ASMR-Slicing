@@ -54,7 +54,8 @@ namespace Infrastructure
                 new BootstrapState(sceneLoader, staticDataService),
                 new LoadLevelState(sceneLoader, gameFactory, staticDataService),
                 new WaitForActionState(this, inputService),
-                new GameLoopState(gameFactory, deformableManager)
+                new GameLoopState(gameFactory, deformableManager),
+                new LevelCompletedState(this, gameFactory, inputService)
             };
             IGameStateMachine stateMachine = new GameStateMachine(states);
             

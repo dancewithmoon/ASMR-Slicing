@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections;
 using Infrastructure.StaticData;
+using Logic.Slice;
 using UnityEngine;
 
-namespace Logic
+namespace Logic.Knife
 {
     public class KnifeSlicing : MonoBehaviour
     {

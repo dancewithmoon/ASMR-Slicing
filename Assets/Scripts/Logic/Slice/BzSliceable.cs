@@ -4,7 +4,7 @@ using BzKovSoft.ObjectSlicer;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Logic
+namespace Logic.Slice
 {
     public class BzSliceable : MonoBehaviour, ISliceable
     {

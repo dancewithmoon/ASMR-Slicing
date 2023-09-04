@@ -2,6 +2,9 @@
 using Deform;
 using Infrastructure.Factory;
 using Logic;
+using Logic.Knife;
+using Logic.Slice;
+using UnityEngine;
 
 namespace Infrastructure.States
 {
@@ -13,12 +16,13 @@ namespace Infrastructure.States
         private SliceMovement _sliceMovement;
         private SliceThrowable _sliceThrowable;
 
+        private KnifeMovementController _knifeMovementController;
         private KnifeMovement _knifeMovement;
         private KnifeSlicing _knifeSlicing;
         private KnifeDeforming _knifeDeforming;
 
         private bool _sliceFinished;
-        
+
         public IGameStateMachine StateMachine { get; set; }
         
         public GameLoopState(IGameFactory gameFactory, DeformableManager deformableManager)
@@ -32,7 +36,9 @@ namespace Infrastructure.States
             _deformableManager.update = false;
             
             _sliceMovement = _gameFactory.SliceableItem.GetComponent<SliceMovement>();
+            _sliceMovement.FinalPositionReached += OnFinalPositionReached;
 
+            _knifeMovementController = _gameFactory.Knife.GetComponent<KnifeMovementController>();
             _knifeMovement = _gameFactory.Knife.GetComponent<KnifeMovement>();
             _knifeSlicing = _gameFactory.Knife.GetComponent<KnifeSlicing>();
             _knifeDeforming = _gameFactory.Knife.GetComponent<KnifeDeforming>();
@@ -46,16 +52,25 @@ namespace Infrastructure.States
 
         public void Exit()
         {
-            _knifeSlicing.OnSliced -= OnSliced;
             _knifeMovement.OnRelease -= OnKnifeRelease;
             _knifeMovement.OnStopped -= OnKnifeStopped;
+            _sliceMovement.FinalPositionReached -= OnFinalPositionReached;
+            _knifeSlicing.OnSliced -= OnSliced;
+            
+            Object.Destroy(_knifeMovementController);
+            Object.Destroy(_knifeMovement);
+            Object.Destroy(_sliceMovement);
         }
 
         private void OnSliced(ISliceable sliceable)
         {
+            _sliceMovement.FinalPositionReached -= OnFinalPositionReached;
+            
             SliceMovement newMovement = sliceable.Positive.GetComponent<SliceMovement>();
             newMovement.Initialize(_sliceMovement.FinalPosition);
+            
             _sliceMovement = newMovement;
+            _sliceMovement.FinalPositionReached += OnFinalPositionReached;
             _sliceMovement.Stop();
             
             _sliceThrowable = sliceable.Negative.GetComponent<SliceThrowable>();
@@ -83,6 +98,11 @@ namespace Infrastructure.States
             _knifeDeforming.StopDeformation();
             _deformableManager.update = false;
             _sliceThrowable.Throw();
+        }
+
+        private void OnFinalPositionReached()
+        {
+            StateMachine.Enter<LevelCompletedState>();
         }
     }
 }

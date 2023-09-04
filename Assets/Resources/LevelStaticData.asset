@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e33c33f7c03140698aa73e850ca41340, type: 3}
   m_Name: LevelStaticData
   m_EditorClassIdentifier: 
-  _knifeData:
+  _knifeSceneData:
     _transformData:
       _worldPosition: {x: 6.26, y: 1.828, z: -6.47}
       _rotationEuler: {x: 90, y: 180, z: 0}
       _scale: {x: 1, y: 1, z: 1}
     _prefab: {fileID: 1183973985763429062, guid: e59cfbd75ea948e45966838f29195b22,
       type: 3}
-  _itemData:
+  _knifeRemovedPosition: {x: 10.4, y: 5.23, z: -6.47}
+  _sliceSceneData:
     _transformData:
       _worldPosition: {x: 4.76, y: 0, z: -5.85}
       _rotationEuler: {x: 0, y: 35.41376, z: 0}
       _scale: {x: 1, y: 1, z: 1}
     _prefab: {fileID: 3899621464511869672, guid: 6791f40435451cd4c858e0162659886c,
       type: 3}
-  _itemFinalPosition: {x: 4.76, y: 0, z: -7.5}
+  _sliceFinalPosition: {x: 4.76, y: 0, z: -7.5}
