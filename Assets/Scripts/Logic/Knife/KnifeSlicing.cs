@@ -7,11 +7,12 @@ namespace Logic.Knife
 {
     public class KnifeSlicing : MonoBehaviour
     {
-        [Header("Debug only. Edit in runtime")]
+        [Header("Runtime only")]
         [SerializeField] private KnifeParameters _knifeParameters;
 
         private bool _isSliceAllowed = true;
 
+        public event Action OnSliceStarted;
         public event Action<ISliceable> OnSliced;
 
         public void Initialize(KnifeParameters knifeParameters)
@@ -29,13 +30,10 @@ namespace Logic.Knife
             if (_isSliceAllowed == false)
                 return;
 
-            if (other.TryGetComponent(out SliceMovement sliceMovement))
+            ISliceable sliceable = other.GetComponentInParent<ISliceable>();
+            if (sliceable != null)
             {
-                sliceMovement.Stop();
-            }
-            
-            if (other.TryGetComponent(out ISliceable sliceable))
-            {
+                OnSliceStarted?.Invoke();
                 Slice(sliceable);
             }
         }

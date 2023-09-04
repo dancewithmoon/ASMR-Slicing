@@ -1,4 +1,6 @@
-﻿using Base.States;
+﻿using System.Collections;
+using Base.Services.CoroutineRunner;
+using Base.States;
 using Deform;
 using Infrastructure.Factory;
 using Logic.Knife;
@@ -9,23 +11,26 @@ namespace Infrastructure.States
 {
     public class GameLoopState : IState
     {
+        private readonly ICoroutineRunner _coroutineRunner;
         private readonly IGameFactory _gameFactory;
         private readonly DeformableManager _deformableManager;
 
         private SliceMovement _sliceMovement;
         private SliceThrowable _sliceThrowable;
 
-        private KnifeMovementController _knifeMovementController;
+        private KnifeInput _knifeInput;
         private KnifeMovement _knifeMovement;
+        private KnifeMovementSpeedSwitcher _knifeMovementSpeedSwitcher;
         private KnifeSlicing _knifeSlicing;
         private KnifeDeforming _knifeDeforming;
 
-        private bool _sliceFinished;
+        private bool _sliceFinished = true;
 
         public IGameStateMachine StateMachine { get; set; }
         
-        public GameLoopState(IGameFactory gameFactory, DeformableManager deformableManager)
+        public GameLoopState(ICoroutineRunner coroutineRunner, IGameFactory gameFactory, DeformableManager deformableManager)
         {
+            _coroutineRunner = coroutineRunner;
             _gameFactory = gameFactory;
             _deformableManager = deformableManager;
         }
@@ -37,11 +42,13 @@ namespace Infrastructure.States
             _sliceMovement = _gameFactory.SliceableItem.GetComponent<SliceMovement>();
             _sliceMovement.FinalPositionReached += OnFinalPositionReached;
 
-            _knifeMovementController = _gameFactory.Knife.GetComponent<KnifeMovementController>();
+            _knifeInput = _gameFactory.Knife.GetComponent<KnifeInput>();
             _knifeMovement = _gameFactory.Knife.GetComponent<KnifeMovement>();
+            _knifeMovementSpeedSwitcher = _gameFactory.Knife.GetComponent<KnifeMovementSpeedSwitcher>();
             _knifeSlicing = _gameFactory.Knife.GetComponent<KnifeSlicing>();
             _knifeDeforming = _gameFactory.Knife.GetComponent<KnifeDeforming>();
 
+            _knifeSlicing.OnSliceStarted += OnSliceStarted;
             _knifeSlicing.OnSliced += OnSliced;
             _knifeMovement.OnRelease += OnKnifeRelease;
             _knifeMovement.OnStopped += OnKnifeStopped;
@@ -51,14 +58,21 @@ namespace Infrastructure.States
 
         public void Exit()
         {
+            _knifeSlicing.OnSliceStarted -= OnSliceStarted;
+            _knifeSlicing.OnSliced -= OnSliced;
             _knifeMovement.OnRelease -= OnKnifeRelease;
             _knifeMovement.OnStopped -= OnKnifeStopped;
-            _sliceMovement.FinalPositionReached -= OnFinalPositionReached;
-            _knifeSlicing.OnSliced -= OnSliced;
-            
-            Object.Destroy(_knifeMovementController);
+
+            Object.Destroy(_knifeInput);
+            Object.Destroy(_knifeMovementSpeedSwitcher);
             Object.Destroy(_knifeMovement);
             Object.Destroy(_sliceMovement);
+        }
+
+        private void OnSliceStarted()
+        {
+            _sliceMovement.Stop();
+            _sliceFinished = false;
         }
 
         private void OnSliced(ISliceable sliceable)
@@ -74,7 +88,6 @@ namespace Infrastructure.States
             _sliceMovement.Stop();
             
             _sliceThrowable = sliceable.Negative.GetComponent<SliceThrowable>();
-            
             _deformableManager.update = true;
             _knifeDeforming.StartDeformation(sliceable.Negative.GetComponent<SliceDeformable>());
         }
@@ -84,7 +97,6 @@ namespace Infrastructure.States
             if (_sliceFinished == false) 
                 return;
             
-            _sliceFinished = false;
             _sliceMovement.Move();
             _knifeSlicing.AllowSlice();
         }
@@ -102,6 +114,13 @@ namespace Infrastructure.States
 
         private void OnFinalPositionReached()
         {
+            _sliceMovement.FinalPositionReached -= OnFinalPositionReached;
+            _coroutineRunner.StartCoroutine(WaitForSliceFinish());
+        }
+
+        private IEnumerator WaitForSliceFinish()
+        {
+            yield return new WaitUntil(() => _sliceFinished);
             StateMachine.Enter<LevelCompletedState>();
         }
     }

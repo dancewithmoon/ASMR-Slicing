@@ -36,8 +36,9 @@ namespace Infrastructure.Factory
 
             KnifeParameters knifeParameters = _staticDataService.GetKnifeStaticData().KnifeParameters;            
             
-            instance.GetComponent<KnifeMovementController>().Initialize(_inputService);
-            instance.GetComponent<KnifeMovement>().Initialize(knifeParameters);
+            instance.GetComponent<KnifeInput>().Initialize(_inputService);
+            instance.GetComponent<KnifeMovement>().Initialize(knifeParameters.MoveDirection, knifeParameters.MoveSpeed, knifeParameters.ReleaseDuration);
+            instance.GetComponent<KnifeMovementSpeedSwitcher>().Initialize(knifeParameters);
             instance.GetComponent<KnifeSlicing>().Initialize(knifeParameters);
             instance.GetComponent<KnifeRemoving>().Initialize(_staticDataService.GetLevelStaticData().KnifeRemovedPosition);
             

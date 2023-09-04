@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: KnifeStaticData
   m_EditorClassIdentifier: 
   _knifeParameters:
+    IsSlicing: 0
     _sliceDirection: {x: 1, y: 0, z: 0}
     _moveDirection: {x: 0, y: -1, z: 0}
-    _moveSpeed: 1
+    _moveSpeed: 2
+    _slicingMoveSpeed: 1
     _releaseDuration: 0.4

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1956113364477005948}
   - component: {fileID: 3890772213290019392}
   - component: {fileID: 8047055829498693111}
+  - component: {fileID: 424780815036285578}
   - component: {fileID: 1544843941527306316}
   - component: {fileID: 1375188031755536559}
   - component: {fileID: 7405227385934342780}
@@ -67,11 +68,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd5adec7bfe1415a8d8633582f6b83cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _knifeParameters:
-    _sliceDirection: {x: 0, y: 0, z: 0}
-    _moveDirection: {x: 0, y: 0, z: 0}
-    _moveSpeed: 0
-    _releaseDuration: 0
+  _direction: {x: 0, y: 0, z: 0}
+  _speed: 0
+  _releaseDuration: 0
+--- !u!114 &424780815036285578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183973985763429062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b893476bae345a0ac6ec2db274460e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1544843941527306316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,6 +111,7 @@ MonoBehaviour:
     _sliceDirection: {x: 0, y: 0, z: 0}
     _moveDirection: {x: 0, y: 0, z: 0}
     _moveSpeed: 0
+    _slicingMoveSpeed: 0
     _releaseDuration: 0
 --- !u!114 &7405227385934342780
 MonoBehaviour:

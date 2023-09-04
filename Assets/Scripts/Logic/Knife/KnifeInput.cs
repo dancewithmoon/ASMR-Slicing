@@ -4,7 +4,7 @@ using UserInput;
 namespace Logic.Knife
 {
     [RequireComponent(typeof(KnifeMovement))]
-    public class KnifeMovementController : MonoBehaviour
+    public class KnifeInput : MonoBehaviour
     {
         private IInputService _inputService;
         private KnifeMovement _movement;

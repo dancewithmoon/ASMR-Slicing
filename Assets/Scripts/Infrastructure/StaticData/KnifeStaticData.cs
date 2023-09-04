@@ -17,19 +17,23 @@ namespace Infrastructure.StaticData
         [SerializeField] private Vector3 _sliceDirection;
         [SerializeField] private Vector3 _moveDirection;
         [SerializeField] private float _moveSpeed;
+        [SerializeField] private float _slicingMoveSpeed;
         [SerializeField] private float _releaseDuration;
-
+        
         public KnifeParameters(KnifeParameters data)
         {
             _sliceDirection = data.SliceDirection;
             _moveDirection = data.MoveDirection;
             _moveSpeed = data.MoveSpeed;
+            _slicingMoveSpeed = data.SlicingMoveSpeed;
             _releaseDuration = data.ReleaseDuration;
         }
 
         public Vector3 SliceDirection => _sliceDirection;
         public Vector3 MoveDirection => _moveDirection;
         public float MoveSpeed => _moveSpeed;
+        public float SlicingMoveSpeed => _slicingMoveSpeed;
+
         public float ReleaseDuration => _releaseDuration;
     }
 }
