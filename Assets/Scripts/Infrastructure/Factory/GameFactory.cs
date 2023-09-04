@@ -46,6 +46,8 @@ namespace Infrastructure.Factory
         {
             GameObject instance = InstantiateRegistered(gameObjectData.Prefab, gameObjectData.TransformData.WorldPosition, 
                 Quaternion.Euler(gameObjectData.TransformData.RotationEuler), gameObjectData.TransformData.Scale);
+
+            instance.GetComponent<SliceMovement>().Initialize(_staticDataService.GetLevelStaticData().ItemFinalPosition);
             
             SliceableItem = instance;
         }

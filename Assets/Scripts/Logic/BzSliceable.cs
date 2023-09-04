@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BzKovSoft.ObjectSlicer;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Logic
@@ -20,13 +21,12 @@ namespace Logic
         public async Task Slice(Plane plane)
         {
             BzSliceTryResult result = await _meshSlicer.SliceAsync(plane);
-
             if (result.sliced == false)
                 throw new Exception($"Slice failed: {result.rejectMessage}");
 
             MeshFilter meshFilter1 = result.resultObjects[0].gameObject.GetComponent<MeshFilter>();
             MeshFilter meshFilter2 = result.resultObjects[1].gameObject.GetComponent<MeshFilter>();
-
+            
             if (meshFilter1.sharedMesh.bounds.center.z > meshFilter2.sharedMesh.bounds.center.z)
             {
                 Positive = meshFilter1.gameObject;
@@ -36,6 +36,22 @@ namespace Logic
             {
                 Positive = meshFilter2.gameObject;
                 Negative = meshFilter1.gameObject;
+            }
+
+            await UniTask.NextFrame();
+            
+            RemoveRedundantSlices(Positive);
+            RemoveRedundantSlices(Negative);
+        }
+
+        private void RemoveRedundantSlices(GameObject slice)
+        {
+            foreach (Transform obj in slice.GetComponentsInChildren<Transform>())
+            {
+                if (obj != null && obj.TryGetComponent(out MeshFilter meshFilter) == false)
+                {
+                    Destroy(obj.gameObject);
+                }
             }
         }
     }

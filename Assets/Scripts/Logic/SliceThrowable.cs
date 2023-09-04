@@ -3,7 +3,7 @@
 namespace Logic
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class Throwable : MonoBehaviour
+    public class SliceThrowable : MonoBehaviour
     {
         [SerializeField] private Vector3 _direction = Vector3.back;
         [SerializeField] private float _throwForce = 5f;

@@ -5,6 +5,7 @@ using Base.Instantiating;
 using Base.Services;
 using Base.Services.CoroutineRunner;
 using Base.States;
+using Deform;
 using Infrastructure.Factory;
 using Infrastructure.States;
 using Infrastructure.StaticData;
@@ -40,6 +41,8 @@ namespace Infrastructure
 
             IInputService inputService = Application.isEditor ? new StandaloneInputService() : new MobileInputService();
 
+            DeformableManager deformableManager = DeformableManager.GetDefaultManager(true);
+
             IAssets assets = new ResourcesAssets();
             IInstantiateService instantiateService = new InstantiateService();
 
@@ -51,7 +54,7 @@ namespace Infrastructure
                 new BootstrapState(sceneLoader, staticDataService),
                 new LoadLevelState(sceneLoader, gameFactory, staticDataService),
                 new WaitForActionState(this, inputService),
-                new GameLoopState(gameFactory)
+                new GameLoopState(gameFactory, deformableManager)
             };
             IGameStateMachine stateMachine = new GameStateMachine(states);
             

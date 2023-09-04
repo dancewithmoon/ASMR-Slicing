@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Infrastructure.StaticData;
 using UnityEngine;
 
@@ -28,6 +29,11 @@ namespace Logic
             if (_isSliceAllowed == false)
                 return;
 
+            if (other.TryGetComponent(out SliceMovement sliceMovement))
+            {
+                sliceMovement.Stop();
+            }
+            
             if (other.TryGetComponent(out ISliceable sliceable))
             {
                 Slice(sliceable);
@@ -36,9 +42,8 @@ namespace Logic
 
         private async void Slice(ISliceable sliceable)
         {
-            await sliceable.Slice(GetSlicePlane());
-            
             _isSliceAllowed = false;
+            await sliceable.Slice(GetSlicePlane());
             OnSliced?.Invoke(sliceable);
         }
 

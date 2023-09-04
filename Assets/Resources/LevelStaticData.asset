@@ -26,3 +26,4 @@ MonoBehaviour:
       _scale: {x: 1, y: 1, z: 1}
     _prefab: {fileID: 3899621464511869672, guid: 6791f40435451cd4c858e0162659886c,
       type: 3}
+  _itemFinalPosition: {x: 4.76, y: 0, z: -7.5}

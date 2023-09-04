@@ -2,17 +2,23 @@ using UnityEngine;
 
 namespace Logic
 {
-    public class Movable : MonoBehaviour
+    public class SliceMovement : MonoBehaviour
     {
-        [SerializeField] private Vector3 _direction;
         [SerializeField] private float _speed;
 
         public bool MovementEnabled { get; private set; }
+        public Vector3 FinalPosition { get; private set; }
+        
+        public void Initialize(Vector3 finalPosition)
+        {
+            FinalPosition = finalPosition;
+        }
 
         public void Move() => MovementEnabled = true;
         
         public void Stop() => MovementEnabled = false;
-
+        
+        
         private void Update()
         {
             if (MovementEnabled)
@@ -25,7 +31,6 @@ namespace Logic
             transform.position = GetNextPosition();
 
         private Vector3 GetNextPosition() =>
-            Vector3.MoveTowards(transform.position, 
-                transform.position + _direction, _speed * Time.deltaTime);
+            Vector3.MoveTowards(transform.position, FinalPosition, _speed * Time.deltaTime);
     }
 }

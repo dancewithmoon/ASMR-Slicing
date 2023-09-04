@@ -14,17 +14,22 @@ namespace Services
                 combine[i].mesh = meshFilters[i].sharedMesh;
                 combine[i].transform = gameObject.transform.worldToLocalMatrix * meshFilters[i].transform.localToWorldMatrix;
                 if (i > 0 && meshFilters[i] != null)
-                {
+                { 
                     Object.Destroy(meshFilters[i].gameObject);
                 }
             }
-
+            
             Mesh mesh = new Mesh();
             mesh.CombineMeshes(combine);
             gameObject.transform.GetComponent<MeshFilter>().sharedMesh = mesh;
-
-            MeshCollider meshCollider = gameObject.AddComponent<MeshCollider>();
-            meshCollider.convex = true;
+            MeshRenderer meshRenderer = gameObject.transform.GetComponent<MeshRenderer>();
+            meshRenderer.materials = new[] { meshRenderer.material };
+            
+            if (useMeshCollider)
+            {
+                MeshCollider meshCollider = gameObject.AddComponent<MeshCollider>();
+                meshCollider.convex = true;
+            }
         }
     }
 }

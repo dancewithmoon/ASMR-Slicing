@@ -1,4 +1,5 @@
 ﻿using Base.States;
+using Deform;
 using Infrastructure.Factory;
 using Logic;
 
@@ -7,32 +8,40 @@ namespace Infrastructure.States
     public class GameLoopState : IState
     {
         private readonly IGameFactory _gameFactory;
+        private readonly DeformableManager _deformableManager;
 
-        private Movable _movable;
-        private KnifeSlicing _knifeSlicing;
+        private SliceMovement _sliceMovement;
+        private SliceThrowable _sliceThrowable;
+
         private KnifeMovement _knifeMovement;
-        private Throwable _slice;
+        private KnifeSlicing _knifeSlicing;
+        private KnifeDeforming _knifeDeforming;
 
         private bool _sliceFinished;
         
         public IGameStateMachine StateMachine { get; set; }
         
-        public GameLoopState(IGameFactory gameFactory)
+        public GameLoopState(IGameFactory gameFactory, DeformableManager deformableManager)
         {
             _gameFactory = gameFactory;
+            _deformableManager = deformableManager;
         }
         
         public void Enter()
         {
-            _movable = _gameFactory.SliceableItem.GetComponent<Movable>();
-            _knifeSlicing = _gameFactory.Knife.GetComponent<KnifeSlicing>();
+            _deformableManager.update = false;
+            
+            _sliceMovement = _gameFactory.SliceableItem.GetComponent<SliceMovement>();
+
             _knifeMovement = _gameFactory.Knife.GetComponent<KnifeMovement>();
+            _knifeSlicing = _gameFactory.Knife.GetComponent<KnifeSlicing>();
+            _knifeDeforming = _gameFactory.Knife.GetComponent<KnifeDeforming>();
 
             _knifeSlicing.OnSliced += OnSliced;
             _knifeMovement.OnRelease += OnKnifeRelease;
             _knifeMovement.OnStopped += OnKnifeStopped;
             
-            _movable.Move();
+            _sliceMovement.Move();
         }
 
         public void Exit()
@@ -44,12 +53,15 @@ namespace Infrastructure.States
 
         private void OnSliced(ISliceable sliceable)
         {
-            _movable.Stop();
+            SliceMovement newMovement = sliceable.Positive.GetComponent<SliceMovement>();
+            newMovement.Initialize(_sliceMovement.FinalPosition);
+            _sliceMovement = newMovement;
+            _sliceMovement.Stop();
             
-            _movable = sliceable.Positive.GetComponent<Movable>();
-            _movable.Stop();
+            _sliceThrowable = sliceable.Negative.GetComponent<SliceThrowable>();
             
-            _slice = sliceable.Negative.GetComponent<Throwable>();
+            _deformableManager.update = true;
+            _knifeDeforming.StartDeformation(sliceable.Negative.GetComponent<SliceDeformable>());
         }
         
         private void OnKnifeRelease()
@@ -58,17 +70,19 @@ namespace Infrastructure.States
                 return;
             
             _sliceFinished = false;
-            _movable.Move();
+            _sliceMovement.Move();
             _knifeSlicing.AllowSlice();
         }
         
         private void OnKnifeStopped()
         {
-            if (_slice == null) 
+            if (_sliceThrowable == null) 
                 return;
             
             _sliceFinished = true;
-            _slice.Throw();
+            _knifeDeforming.StopDeformation();
+            _deformableManager.update = false;
+            _sliceThrowable.Throw();
         }
     }
 }
