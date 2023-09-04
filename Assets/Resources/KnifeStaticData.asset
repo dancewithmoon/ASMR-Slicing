@@ -15,5 +15,5 @@ MonoBehaviour:
   _knifeParameters:
     _sliceDirection: {x: 1, y: 0, z: 0}
     _moveDirection: {x: 0, y: -1, z: 0}
-    _moveSpeed: 3
+    _moveSpeed: 1
     _releaseDuration: 0.4

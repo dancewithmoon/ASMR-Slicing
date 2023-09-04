@@ -14,12 +14,11 @@ namespace Logic
         private Rigidbody _rigidbody;
         private Vector3 _defaultPosition;
         private bool _stopped;
+        private bool _released;
 
         public event Action OnStopped;
         public event Action OnRelease;
-
-        public bool Released { get; private set; }
-
+        
         public void Initialize(KnifeParameters knifeParameters)
         {
             _rigidbody = GetComponent<Rigidbody>();
@@ -29,18 +28,26 @@ namespace Logic
 
         public void Move()
         {
-            if(_stopped)
+            if(_stopped || _released)
                 return;
             
-            Released = false;
             _rigidbody.MovePosition(GetNextPosition());
         }
 
         public void Release()
         {
-            Released = true;
+            if(_released)
+                return;
+
             _stopped = false;
-            _rigidbody.DOMove(_defaultPosition, _knifeParameters.ReleaseDuration).OnComplete(() => OnRelease?.Invoke());
+            _released = true;
+            
+            _rigidbody.DOMove(_defaultPosition, _knifeParameters.ReleaseDuration)
+                .OnComplete(() =>
+                {
+                    _released = false;
+                    OnRelease?.Invoke();
+                });
         }
 
         public void Stop()
@@ -50,6 +57,6 @@ namespace Logic
         }
 
         private Vector3 GetNextPosition() =>
-            Vector3.MoveTowards(transform.position, transform.position + _knifeParameters.MoveDirection, _knifeParameters.MoveSpeed * Time.deltaTime);
+            Vector3.MoveTowards(transform.position, transform.position + _knifeParameters.MoveDirection, _knifeParameters.MoveSpeed * Time.fixedDeltaTime);
     }
 }

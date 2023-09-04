@@ -15,16 +15,13 @@ namespace Logic
             _movement = GetComponent<KnifeMovement>();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (_inputService.IsPressed)
             {
                 _movement.Move();
                 return;
             }
-            
-            if(_movement.Released)
-                return;
 
             _movement.Release();
         }
