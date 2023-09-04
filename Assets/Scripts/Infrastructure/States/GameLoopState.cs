@@ -1,7 +1,6 @@
 ﻿using Base.States;
 using Deform;
 using Infrastructure.Factory;
-using Logic;
 using Logic.Knife;
 using Logic.Slice;
 using UnityEngine;
@@ -65,8 +64,9 @@ namespace Infrastructure.States
         private void OnSliced(ISliceable sliceable)
         {
             _sliceMovement.FinalPositionReached -= OnFinalPositionReached;
-            
-            SliceMovement newMovement = sliceable.Positive.GetComponent<SliceMovement>();
+
+            _gameFactory.SliceableItem = sliceable.Positive;
+            SliceMovement newMovement = _gameFactory.SliceableItem.GetComponent<SliceMovement>();
             newMovement.Initialize(_sliceMovement.FinalPosition);
             
             _sliceMovement = newMovement;

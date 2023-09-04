@@ -16,7 +16,7 @@ namespace Infrastructure.Factory
         private readonly IStaticDataService _staticDataService;
 
         public GameObject Knife { get; private set; }
-        public GameObject SliceableItem { get; private set; }
+        public GameObject SliceableItem { get; set; }
         
         public GameFactory(IAssets assets, IInstantiateService instantiateService, IInputService inputService, IStaticDataService staticDataService) : base(assets, instantiateService)
         {

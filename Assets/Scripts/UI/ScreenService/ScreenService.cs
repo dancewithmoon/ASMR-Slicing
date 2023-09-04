@@ -44,6 +44,8 @@ namespace UI.ScreenService
             return screenId switch
             {
                 ScreenId.StartScreen => _uiFactory.CreateStartScreen(),
+                ScreenId.LevelCompletedScreen => _uiFactory.CreateLevelCompletedScreen(),
+                ScreenId.GameHudScreen => _uiFactory.CreateGameHudScreen(),
                 _ => throw new ArgumentOutOfRangeException(nameof(screenId), screenId, null)
             };
         }

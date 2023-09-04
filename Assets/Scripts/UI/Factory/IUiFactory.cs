@@ -7,5 +7,7 @@ namespace UI.Factory
     {
         void CreateUIRoot();
         BaseScreen CreateStartScreen();
+        BaseScreen CreateLevelCompletedScreen();
+        BaseScreen CreateGameHudScreen();
     }
 }

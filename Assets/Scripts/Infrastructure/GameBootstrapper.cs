@@ -9,7 +9,6 @@ using Deform;
 using Infrastructure.Factory;
 using Infrastructure.States;
 using Infrastructure.StaticData;
-using Services;
 using UI.Factory;
 using UI.ScreenService;
 using UI.StaticData;
@@ -53,17 +52,17 @@ namespace Infrastructure
             IUiStaticDataService uiStaticDataService = new UiStaticDataService(assets);
                 
             IGameFactory gameFactory = new GameFactory(assets, instantiateService, inputService, staticDataService);
-            IUiFactory uiFactory = new UiFactory(assets, instantiateService, uiStaticDataService);
+            IUiFactory uiFactory = new UiFactory(assets, instantiateService, uiStaticDataService, staticDataService, gameFactory);
 
             IScreenService screenService = new ScreenService(uiFactory);
             
             List<IExitableState> states = new List<IExitableState>
             {
                 new BootstrapState(sceneLoader, staticDataService, uiStaticDataService),
-                new LoadLevelState(sceneLoader, gameFactory, staticDataService, uiFactory),
+                new LoadLevelState(sceneLoader, gameFactory, staticDataService, uiFactory, screenService),
                 new WaitForActionState(this, inputService, screenService),
                 new GameLoopState(gameFactory, deformableManager),
-                new LevelCompletedState(this, gameFactory, inputService)
+                new LevelCompletedState(this, gameFactory, inputService, screenService)
             };
             IGameStateMachine stateMachine = new GameStateMachine(states);
 
