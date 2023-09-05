@@ -10,14 +10,17 @@ namespace Logic.Knife
         [SerializeField] private float _density;
         [SerializeField] private LineRenderer _lineRendererPrefab;
 
-        private readonly Dictionary<Collider, LineRenderer> _lineRenderers = new Dictionary<Collider, LineRenderer>();
+        private Transform _lineRenderersParent;
         private float _maxPoint;
         private float _step;
+        
+        private readonly Dictionary<Collider, LineRenderer> _lineRenderers = new Dictionary<Collider, LineRenderer>();
 
         private void Awake()
         {
             _maxPoint = GetMaxPoint();
             _step = GetStep();
+            _lineRenderersParent = new GameObject("Line Renderers").transform;
         }
 
         private void Update()
@@ -52,7 +55,7 @@ namespace Logic.Knife
 
         private LineRenderer CreateLineRenderer(Collider forKey)
         {
-            LineRenderer lineRenderer = Instantiate(_lineRendererPrefab);
+            LineRenderer lineRenderer = Instantiate(_lineRendererPrefab, _lineRenderersParent);
             _lineRenderers[forKey] = lineRenderer;
             return lineRenderer;
         }

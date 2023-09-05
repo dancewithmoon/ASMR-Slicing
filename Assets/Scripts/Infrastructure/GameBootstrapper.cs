@@ -31,6 +31,7 @@ namespace Infrastructure
                 return;
             }
 
+            Application.targetFrameRate = 60;
             DontDestroyOnLoad(this);
             _instance = this;
             

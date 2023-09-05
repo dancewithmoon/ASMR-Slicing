@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BzKovSoft.ObjectSlicer;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -8,40 +7,38 @@ namespace Logic.Slice
 {
     public class BzSliceable : MonoBehaviour, ISliceable
     {
-        private IBzMeshSlicer _meshSlicer;
+        private IBzSliceable _meshSlicer;
         
         public GameObject Positive { get; private set; }
         public GameObject Negative { get; private set; }
+
+        private BzSliceTryResult _sliceResult;
         
         private void Awake()
         {
-            _meshSlicer = GetComponent<IBzMeshSlicer>();
+            _meshSlicer = GetComponent<IBzSliceable>();
         }
 
         public async Task Slice(Plane plane)
         {
-            BzSliceTryResult result = await _meshSlicer.SliceAsync(plane);
-            if (result.sliced == false)
-                throw new Exception($"Slice failed: {result.rejectMessage}");
-
-            MeshFilter meshFilter1 = result.resultObjects[0].gameObject.GetComponent<MeshFilter>();
-            MeshFilter meshFilter2 = result.resultObjects[1].gameObject.GetComponent<MeshFilter>();
+            _meshSlicer.Slice(plane, OnSlice);
             
-            if (meshFilter1.sharedMesh.bounds.center.z > meshFilter2.sharedMesh.bounds.center.z)
-            {
-                Positive = meshFilter1.gameObject;
-                Negative = meshFilter2.gameObject;
-            }
-            else
-            {
-                Positive = meshFilter2.gameObject;
-                Negative = meshFilter1.gameObject;
-            }
+            await UniTask.WaitUntil(() => _sliceResult != null);
 
+            Positive = _sliceResult.outObjectPos;
+            Negative = _sliceResult.outObjectNeg;
+
+            _sliceResult = null;
+            
             await UniTask.NextFrame();
             
             RemoveRedundantSlices(Positive);
             RemoveRedundantSlices(Negative);
+        }
+
+        private void OnSlice(BzSliceTryResult result)
+        {
+            _sliceResult = result;
         }
 
         private void RemoveRedundantSlices(GameObject slice)
