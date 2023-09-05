@@ -6,6 +6,7 @@ using Infrastructure.Factory;
 using Logic.Knife;
 using Logic.Slice;
 using UnityEngine;
+using UserInput;
 
 namespace Infrastructure.States
 {
@@ -14,6 +15,7 @@ namespace Infrastructure.States
         private readonly ICoroutineRunner _coroutineRunner;
         private readonly IGameFactory _gameFactory;
         private readonly DeformableManager _deformableManager;
+        private readonly IInputService _inputService;
 
         private SliceMovement _sliceMovement;
         private SliceThrowable _sliceThrowable;
@@ -28,11 +30,12 @@ namespace Infrastructure.States
 
         public IGameStateMachine StateMachine { get; set; }
         
-        public GameLoopState(ICoroutineRunner coroutineRunner, IGameFactory gameFactory, DeformableManager deformableManager)
+        public GameLoopState(ICoroutineRunner coroutineRunner, IGameFactory gameFactory, DeformableManager deformableManager, IInputService inputService)
         {
             _coroutineRunner = coroutineRunner;
             _gameFactory = gameFactory;
             _deformableManager = deformableManager;
+            _inputService = inputService;
         }
         
         public void Enter()
@@ -115,12 +118,20 @@ namespace Infrastructure.States
         private void OnFinalPositionReached()
         {
             _sliceMovement.FinalPositionReached -= OnFinalPositionReached;
-            _coroutineRunner.StartCoroutine(WaitForSliceFinish());
+            
+            if (_inputService.IsPressed)
+            {
+                _coroutineRunner.StartCoroutine(WaitForSliceFinish());
+            }
+            else
+            {
+                StateMachine.Enter<LevelCompletedState>();
+            }
         }
 
         private IEnumerator WaitForSliceFinish()
         {
-            yield return new WaitUntil(() => _sliceFinished);
+            yield return new WaitUntil(() => _knifeMovement.Stopped || (_knifeMovement.Released && _sliceFinished));
             StateMachine.Enter<LevelCompletedState>();
         }
     }

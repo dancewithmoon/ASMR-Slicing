@@ -42,6 +42,7 @@ namespace Infrastructure.States
         
         private IEnumerator WaitForAction()
         {
+            yield return new WaitForSeconds(1f);
             yield return new WaitUntil(() => _inputService.IsPressed);
             StateMachine.Enter<LoadLevelState, string>(Scenes.TestScene);
         }

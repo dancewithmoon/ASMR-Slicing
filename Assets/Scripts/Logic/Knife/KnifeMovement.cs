@@ -15,11 +15,11 @@ namespace Logic.Knife
         private Rigidbody _rigidbody;
         private Vector3 _defaultPosition;
 
-        private bool _stopped;
-        private bool _released;
-
         public event Action OnStopped;
         public event Action OnRelease;
+        
+        public bool Stopped { get; private set; }
+        public bool Released { get; private set; }
         
         public void Initialize(Vector3 direction, float speed, float releaseDuration)
         {
@@ -34,7 +34,7 @@ namespace Logic.Knife
 
         public void Move()
         {
-            if(_stopped || _released)
+            if(Stopped || Released)
                 return;
             
             _rigidbody.MovePosition(GetNextPosition());
@@ -42,23 +42,23 @@ namespace Logic.Knife
 
         public void Release()
         {
-            if(_released)
+            if(Released)
                 return;
 
-            _stopped = false;
-            _released = true;
+            Stopped = false;
+            Released = true;
             
             _rigidbody.DOMove(_defaultPosition, _releaseDuration)
                 .OnComplete(() =>
                 {
-                    _released = false;
+                    Released = false;
                     OnRelease?.Invoke();
                 });
         }
 
         public void Stop()
         {
-            _stopped = true;
+            Stopped = true;
             OnStopped?.Invoke();
         }
 
