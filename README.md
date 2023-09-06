@@ -4,7 +4,7 @@
 
 [**Відео геймплея**](https://youtube.com/shorts/Ci4uhaaah9w)
 
-![Gameplay](https://gcdnb.pbrd.co/images/GcITDIpgC6V0.gif)
+![Gameplay](https://github.com/dancewithmoon/ASMR-Slicing/assets/91838410/79f5660f-7fbe-4e22-b6a8-aac30b954e9e)
 
 ### Алгоритм реалізації:
 **1. Спроєктовано базову архітектуру**
